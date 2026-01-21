@@ -6,7 +6,7 @@
 <style>
   body { font-family: Arial; background: #eef2f5; }
   svg { background: white; border: 1px solid #ccc; }
-  text { font-size: 13px; }
+  text { font-size: 12px; fill: #000; }
 </style>
 </head>
 <body>
@@ -17,137 +17,122 @@
   <option value="">Select Call Type</option>
   <option value="Registration">IMS Registration</option>
   <option value="IMS OG Call">IMS OG Call</option>
-  <option value="IMS IC Call">IMS IC Call</option>
 </select>
 
 <div id="diagram"></div>
 
 <script>
 function drawCallFlow() {
-  const selectedCallType = document.getElementById("callType").value;
+  const type = document.getElementById("callType").value;
   let svg = "";
 
-  switch (selectedCallType) {
+  switch (type) {
 
     /* ================= IMS REGISTRATION ================= */
-    case 'Registration':
+    case "Registration":
       svg = `
-      <svg width="1000" height="500">
-        <defs>
-          <marker id="arrow" markerWidth="10" markerHeight="10"
-                  refX="10" refY="5" orient="auto">
-            <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
-          </marker>
-        </defs>
+<svg width="1000" height="520">
 
-        <!-- Network Elements -->
-        <text x="50" y="30">UE</text>
-        <text x="200" y="30">P-CSCF</text>
-        <text x="350" y="30">I-CSCF</text>
-        <text x="500" y="30">S-CSCF</text>
-        <text x="650" y="30">HSS</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10"
+            refX="10" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
+    </marker>
+  </defs>
 
-        <!-- Lifelines -->
-        <line x1="60" y1="40" x2="60" y2="450" stroke="gray"/>
-        <line x1="210" y1="40" x2="210" y2="450" stroke="gray"/>
-        <line x1="360" y1="40" x2="360" y2="450" stroke="gray"/>
-        <line x1="510" y1="40" x2="510" y2="450" stroke="gray"/>
-        <line x1="660" y1="40" x2="660" y2="450" stroke="gray"/>
-        
+  <!-- Nodes -->
+  <text x="50" y="25">UE</text>
+  <text x="200" y="25">P-CSCF</text>
+  <text x="350" y="25">I-CSCF</text>
+  <text x="500" y="25">S-CSCF</text>
+  <text x="650" y="25">HSS</text>
 
-        <!-- Messages -->
-        <line x1="60" y1="80" x2="210" y2="80"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="110" y="70">REGISTER</text>
+  <!-- Lifelines -->
+  <line x1="60" y1="35" x2="60" y2="480" stroke="#999"/>
+  <line x1="210" y1="35" x2="210" y2="480" stroke="#999"/>
+  <line x1="360" y1="35" x2="360" y2="480" stroke="#999"/>
+  <line x1="510" y1="35" x2="510" y2="480" stroke="#999"/>
+  <line x1="660" y1="35" x2="660" y2="480" stroke="#999"/>
 
-        <line x1="210" y1="120" x2="360" y2="120"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="250" y="110">REGISTER        
-        IMPU, auth data(username,realm,algorithm,authURI)
-        sip instance,security algorithm,security-client=ip=sec
-        </text>
+  <!-- REGISTER -->
+  <line x1="60" y1="80" x2="210" y2="80" stroke="black" marker-end="url(#arrow)"/>
+  <text x="110" y="70">REGISTER</text>
 
-        <line x1="360" y1="160" x2="660" y2="160"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="470" y="150">UAR(User Authorization Request)
-        IMPU, User-Name, Visited-Network-ID</text>
+  <line x1="210" y1="120" x2="360" y2="120" stroke="black" marker-end="url(#arrow)"/>
+  <text x="225" y="105">
+    <tspan x="225" dy="0">REGISTER</tspan>
+    <tspan x="225" dy="14">IMPU, IMPI</tspan>
+    <tspan x="225" dy="14">Security Params</tspan>
+  </text>
 
-        <line x1="660" y1="200" x2="360" y2="200"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="470" y="190">UAA(User Authorization Answer)
-       /n Result= DIAMETER_FIRST_REGISTRAION
-        </text>
+  <!-- UAR / UAA -->
+  <line x1="360" y1="170" x2="660" y2="170" stroke="black" marker-end="url(#arrow)"/>
+  <text x="430" y="155">
+    <tspan x="430">UAR</tspan>
+    <tspan x="430" dy="14">IMPU, Visited-Network-ID</tspan>
+  </text>
 
-        <line x1="360" y1="240" x2="510" y2="240"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="380" y="235">REGISTER</text>
+  <line x1="660" y1="220" x2="360" y2="220" stroke="black" marker-end="url(#arrow)"/>
+  <text x="430" y="205">
+    <tspan x="430">UAA</tspan>
+    <tspan x="430" dy="14">Result = FIRST_REGISTRATION</tspan>
+  </text>
 
-                <line x1="510" y1="280" x2="660" y2="280"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="550" y="270">MAR(Multimedia Authorization Request)
-        IMPU, IMPI, Auth Scheme, Server name</text>
+  <!-- REGISTER to S-CSCF -->
+  <line x1="360" y1="270" x2="510" y2="270" stroke="black" marker-end="url(#arrow)"/>
+  <text x="400" y="260">REGISTER</text>
 
-                <line x1="660" y1="320" x2="510" y2="320"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="550" y="310">MAA(Multimedia Authorization Request)
-        Auth Data, IMPU, IMPI</text>
+  <!-- MAR / MAA -->
+  <line x1="510" y1="320" x2="660" y2="320" stroke="black" marker-end="url(#arrow)"/>
+  <text x="540" y="305">
+    <tspan x="540">MAR</tspan>
+    <tspan x="540" dy="14">IMPU, IMPI</tspan>
+  </text>
 
-        
-      </svg>`;
+  <line x1="660" y1="370" x2="510" y2="370" stroke="black" marker-end="url(#arrow)"/>
+  <text x="540" y="355">
+    <tspan x="540">MAA</tspan>
+    <tspan x="540" dy="14">Authentication Vectors</tspan>
+  </text>
+
+</svg>`;
       break;
 
     /* ================= IMS OG CALL ================= */
-    case 'IMS OG Call':
+    case "IMS OG Call":
       svg = `
-      <svg width="1000" height="500">
-        <defs>
-          <marker id="arrow" markerWidth="10" markerHeight="10"
-                  refX="10" refY="5" orient="auto">
-            <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
-          </marker>
-        </defs>
+<svg width="1000" height="450">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10"
+            refX="10" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
+    </marker>
+  </defs>
 
-        <!-- Network Elements -->
-        <text x="50" y="30">UE-A</text>
-        <text x="200" y="30">P-CSCF</text>
-        <text x="350" y="30">I-CSCF</text>
-        <text x="500" y="30">S-CSCF</text>
-        <text x="650" y="30">HSS</text>
-        <text x="800" y="30">UE-B</text>
+  <text x="50" y="25">UE-A</text>
+  <text x="200" y="25">P-CSCF</text>
+  <text x="350" y="25">I-CSCF</text>
+  <text x="500" y="25">S-CSCF</text>
+  <text x="800" y="25">UE-B</text>
 
-        <!-- Lifelines -->
-        <line x1="60" y1="40" x2="60" y2="450" stroke="gray"/>
-        <line x1="210" y1="40" x2="210" y2="450" stroke="gray"/>
-        <line x1="360" y1="40" x2="360" y2="450" stroke="gray"/>
-        <line x1="510" y1="40" x2="510" y2="450" stroke="gray"/>
-        <line x1="660" y1="40" x2="660" y2="450" stroke="gray"/>
-        <line x1="810" y1="40" x2="810" y2="450" stroke="gray"/>
+  <line x1="60" y1="35" x2="60" y2="420" stroke="#999"/>
+  <line x1="210" y1="35" x2="210" y2="420" stroke="#999"/>
+  <line x1="360" y1="35" x2="360" y2="420" stroke="#999"/>
+  <line x1="510" y1="35" x2="510" y2="420" stroke="#999"/>
+  <line x1="810" y1="35" x2="810" y2="420" stroke="#999"/>
 
-        <!-- Messages -->
-        <line x1="60" y1="80" x2="210" y2="80"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="110" y="70">INVITE</text>
+  <line x1="60" y1="80" x2="210" y2="80" stroke="black" marker-end="url(#arrow)"/>
+  <text x="110" y="70">INVITE</text>
 
-        <line x1="210" y1="120" x2="360" y2="120"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="250" y="110">INVITE</text>
+  <line x1="210" y1="130" x2="360" y2="130" stroke="black" marker-end="url(#arrow)"/>
+  <text x="250" y="120">INVITE</text>
 
-        <line x1="360" y1="160" x2="660" y2="160"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="470" y="150">UAR</text>
+  <line x1="360" y1="180" x2="510" y2="180" stroke="black" marker-end="url(#arrow)"/>
+  <text x="400" y="170">INVITE</text>
 
-        <line x1="660" y1="200" x2="360" y2="200"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="470" y="190">UAA</text>
-
-        <line x1="360" y1="240" x2="510" y2="240"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="400" y="230">INVITE</text>
-
-        <line x1="510" y1="280" x2="810" y2="280"
-              stroke="black" marker-end="url(#arrow)"/>
-        <text x="630" y="270">INVITE</text>
-      </svg>`;
+  <line x1="510" y1="230" x2="810" y2="230" stroke="black" marker-end="url(#arrow)"/>
+  <text x="650" y="220">INVITE</text>
+</svg>`;
       break;
 
     default:
