@@ -71,8 +71,16 @@ function drawCallFlow() {
       </svg>`;
 
       case 'OG Call':
+      
       svg = 
       <svg width="1000" height="500">
+
+                <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10"
+                  refX="10" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
+          </marker>
+        </defs>
   <!-- Network Elements -->
   <text x="50" y="30">UE-A</text>
   <text x="200" y="30">P-CSCF</text>
