@@ -2,142 +2,84 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>IMS Call Flow</title>
+<title>JSON Call Flow Upload</title>
 <style>
   body { font-family: Arial; background: #eef2f5; }
-  svg { background: white; border: 1px solid #ccc; }
-  text { font-size: 12px; fill: #000; }
+  svg { background: #fff; border: 1px solid #ccc; }
+  text { font-size: 12px; }
 </style>
 </head>
 <body>
 
-<h2>IMS Call Flow Diagram</h2>
+<h2>Upload Call Flow JSON</h2>
 
-<select id="callType" onchange="drawCallFlow()">
-  <option value="">Select Call Type</option>
-  <option value="Registration">IMS Registration</option>
-  <option value="IMS OG Call">IMS OG Call</option>
-</select>
-
+<input type="file" id="jsonFile" accept=".json">
 <div id="diagram"></div>
 
 <script>
-function drawCallFlow() {
-  const type = document.getElementById("callType").value;
-  let svg = "";
+document.getElementById("jsonFile").addEventListener("change", loadJSON);
 
-  switch (type) {
+function loadJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    /* ================= IMS REGISTRATION ================= */
-    case "Registration":
-      svg = `
-<svg width="1000" height="520">
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const flow = JSON.parse(e.target.result);
+      drawFlow(flow);
+    } catch {
+      alert("Invalid JSON file");
+    }
+  };
+  reader.readAsText(file);
+}
 
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10"
-            refX="10" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
-    </marker>
-  </defs>
+function drawFlow(flow) {
+  const colGap = 150;
+  const startX = 70;
+  const startY = 80;
+  const msgGap = 50;
 
-  <!-- Nodes -->
-  <text x="50" y="25">UE</text>
-  <text x="200" y="25">P-CSCF</text>
-  <text x="350" y="25">I-CSCF</text>
-  <text x="500" y="25">S-CSCF</text>
-  <text x="650" y="25">HSS</text>
+  const height = flow.messages.length * msgGap + 140;
+  let svg = `
+  <svg width="1100" height="${height}">
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10"
+              refX="10" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
+      </marker>
+    </defs>
+  `;
 
-  <!-- Lifelines -->
-  <line x1="60" y1="35" x2="60" y2="480" stroke="#999"/>
-  <line x1="210" y1="35" x2="210" y2="480" stroke="#999"/>
-  <line x1="360" y1="35" x2="360" y2="480" stroke="#999"/>
-  <line x1="510" y1="35" x2="510" y2="480" stroke="#999"/>
-  <line x1="660" y1="35" x2="660" y2="480" stroke="#999"/>
+  /* Lifelines */
+  flow.nodes.forEach((node, i) => {
+    const x = startX + i * colGap;
+    svg += `
+      <text x="${x - 15}" y="30">${node}</text>
+      <line x1="${x}" y1="40" x2="${x}" y2="${height - 20}" stroke="#aaa"/>
+    `;
+  });
 
-  <!-- REGISTER -->
-  <line x1="60" y1="80" x2="210" y2="80" stroke="black" marker-end="url(#arrow)"/>
-  <text x="110" y="70">REGISTER</text>
+  /* Messages */
+  flow.messages.forEach((m, i) => {
+    const y = startY + i * msgGap;
+    const fromX = startX + flow.nodes.indexOf(m.from) * colGap;
+    const toX   = startX + flow.nodes.indexOf(m.to) * colGap;
 
-  <line x1="210" y1="120" x2="360" y2="120" stroke="black" marker-end="url(#arrow)"/>
-  <text x="225" y="105">
-    <tspan x="225" dy="2">REGISTER</tspan>
-    <tspan x="225" dy="25">IMPU, IMPI, Security Params</tspan>
-    </text>
+    svg += `
+      <line x1="${fromX}" y1="${y}" x2="${toX}" y2="${y}"
+            stroke="black" marker-end="url(#arrow)"/>
 
-  <!-- UAR / UAA -->
-  <line x1="360" y1="170" x2="660" y2="170" stroke="black" marker-end="url(#arrow)"/>
-  <text x="430" y="155">
-    <tspan x="430">UAR</tspan>
-    <tspan x="430" dy="14">IMPU, Visited-Network-ID</tspan>
-  </text>
+      <text x="${(fromX + toX) / 2 - 40}" y="${y - 5}">
+        ${m.text.map((t, j) =>
+          `<tspan x="${(fromX + toX) / 2 - 40}" dy="${j === 0 ? 0 : 14}">${t}</tspan>`
+        ).join("")}
+      </text>
+    `;
+  });
 
-  <line x1="660" y1="220" x2="360" y2="220" stroke="black" marker-end="url(#arrow)"/>
-  <text x="430" y="205">
-    <tspan x="430">UAA</tspan>
-    <tspan x="430" dy="14">Result = FIRST_REGISTRATION</tspan>
-  </text>
-
-  <!-- REGISTER to S-CSCF -->
-  <line x1="360" y1="270" x2="510" y2="270" stroke="black" marker-end="url(#arrow)"/>
-  <text x="400" y="260">REGISTER</text>
-
-  <!-- MAR / MAA -->
-  <line x1="510" y1="320" x2="660" y2="320" stroke="black" marker-end="url(#arrow)"/>
-  <text x="540" y="305">
-    <tspan x="540">MAR</tspan>
-    <tspan x="540" dy="14">IMPU, IMPI</tspan>
-  </text>
-
-  <line x1="660" y1="370" x2="510" y2="370" stroke="black" marker-end="url(#arrow)"/>
-  <text x="540" y="355">
-    <tspan x="540">MAA</tspan>
-    <tspan x="540" dy="14">Authentication Vectors</tspan>
-  </text>
-
-</svg>`;
-      break;
-
-    /* ================= IMS OG CALL ================= */
-    case "IMS OG Call":
-      svg = `
-<svg width="1000" height="450">
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10"
-            refX="10" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
-    </marker>
-  </defs>
-
-  <text x="50" y="25">UE-A</text>
-  <text x="200" y="25">P-CSCF</text>
-  <text x="350" y="25">I-CSCF</text>
-  <text x="500" y="25">S-CSCF</text>
-  <text x="800" y="25">UE-B</text>
-
-  <line x1="60" y1="35" x2="60" y2="420" stroke="#999"/>
-  <line x1="210" y1="35" x2="210" y2="420" stroke="#999"/>
-  <line x1="360" y1="35" x2="360" y2="420" stroke="#999"/>
-  <line x1="510" y1="35" x2="510" y2="420" stroke="#999"/>
-  <line x1="810" y1="35" x2="810" y2="420" stroke="#999"/>
-
-  <line x1="60" y1="80" x2="210" y2="80" stroke="black" marker-end="url(#arrow)"/>
-  <text x="110" y="70">INVITE</text>
-
-  <line x1="210" y1="130" x2="360" y2="130" stroke="black" marker-end="url(#arrow)"/>
-  <text x="250" y="120">INVITE</text>
-
-  <line x1="360" y1="180" x2="510" y2="180" stroke="black" marker-end="url(#arrow)"/>
-  <text x="400" y="170">INVITE</text>
-
-  <line x1="510" y1="230" x2="810" y2="230" stroke="black" marker-end="url(#arrow)"/>
-  <text x="650" y="220">INVITE</text>
-</svg>`;
-      break;
-
-    default:
-      svg = "<p>Please select a call type</p>";
-  }
-
+  svg += `</svg>`;
   document.getElementById("diagram").innerHTML = svg;
 }
 </script>
