@@ -15,7 +15,7 @@
 <select id="callType" onchange="drawCallFlow()">
   <option value="">Select Call Type</option>
   <option value="Registration">IMS Registration</option>
-  <option value="Call">IMS Call</option>
+  <option value="OG Call">IMS OG Call</option>
 </select>
 
 <div id="diagram"></div>
@@ -69,6 +69,48 @@ function drawCallFlow() {
         <text x="450" y="190">UAA</text>
 
       </svg>`;
+
+      case 'OG Call':
+      svg = 
+      <svg width="1000" height="500">
+  <!-- Network Elements -->
+  <text x="50" y="30">UE-A</text>
+  <text x="200" y="30">P-CSCF</text>
+  <text x="350" y="30">I-CSCF</text>
+  <text x="500" y="30">S-CSCF</text>
+  <text x="650" y="30">HSS</text>
+  <text x="800" y="30">UE-B</text>
+
+  <!-- Lifelines -->
+  <line x1="60" y1="40" x2="60" y2="450" stroke="gray"/>
+  <line x1="210" y1="40" x2="210" y2="450" stroke="gray"/>
+  <line x1="360" y1="40" x2="360" y2="450" stroke="gray"/>
+  <line x1="510" y1="40" x2="510" y2="450" stroke="gray"/>
+  <line x1="660" y1="40" x2="660" y2="450" stroke="gray"/>
+  <line x1="810" y1="40" x2="810" y2="450" stroke="gray"/>
+
+  <!-- Messages -->
+  <line x1="60" y1="80" x2="210" y2="80" stroke="black"/>
+  <text x="100" y="70">INVITE</text>
+
+  <line x1="210" y1="120" x2="360" y2="120" stroke="black"/>
+  <text x="240" y="110">INVITE</text>
+
+  <line x1="360" y1="160" x2="660" y2="160" stroke="black"/>
+  <text x="420" y="150">UAR</text>
+
+  <line x1="660" y1="200" x2="360" y2="200" stroke="black"/>
+  <text x="420" y="190">UAA</text>
+
+  <line x1="360" y1="240" x2="510" y2="240" stroke="black"/>
+  <text x="390" y="230">INVITE</text>
+
+  <line x1="510" y1="280" x2="810" y2="280" stroke="black"/>
+  <text x="620" y="270">INVITE</text>
+
+</svg>
+
+      
       break;
 
     default:
