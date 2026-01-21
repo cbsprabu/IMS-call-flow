@@ -443,6 +443,26 @@
       const svg = document.createElementNS(svgNS, 'svg');
       svg.setAttribute('viewBox', '0 0 1400 900');
       svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+// ---------- ADD THIS BLOCK (ONCE) ----------
+const defs = document.createElementNS(svgNS, 'defs');
+
+const marker = document.createElementNS(svgNS, 'marker');
+marker.setAttribute('id', 'arrow');
+marker.setAttribute('markerWidth', '10');
+marker.setAttribute('markerHeight', '10');
+marker.setAttribute('refX', '9');
+marker.setAttribute('refY', '3');
+marker.setAttribute('orient', 'auto');
+marker.setAttribute('markerUnits', 'strokeWidth');
+
+const arrowPath = document.createElementNS(svgNS, 'path');
+arrowPath.setAttribute('d', 'M0,0 L0,6 L9,3 z');
+arrowPath.setAttribute('fill', '#64748b');
+
+marker.appendChild(arrowPath);
+defs.appendChild(marker);
+svg.appendChild(defs);
+// ---------- END ----------
 
       const boxWidth = 90;
       const boxHeight = 70;
