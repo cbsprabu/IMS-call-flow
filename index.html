@@ -16,7 +16,8 @@
 <select id="callType" onchange="drawCallFlow()">
   <option value="">Select Call Type</option>
   <option value="Registration">IMS Registration</option>
-  <option value="OG Call">IMS OG Call</option>
+  <option value="IMS OG Call">IMS OG Call</option>
+  <option value="IMS IC Call">IMS IC Call</option>
 </select>
 
 <div id="diagram"></div>
@@ -52,6 +53,7 @@ function drawCallFlow() {
         <line x1="360" y1="40" x2="360" y2="450" stroke="gray"/>
         <line x1="510" y1="40" x2="510" y2="450" stroke="gray"/>
         <line x1="660" y1="40" x2="660" y2="450" stroke="gray"/>
+        
 
         <!-- Messages -->
         <line x1="60" y1="80" x2="210" y2="80"
@@ -60,20 +62,30 @@ function drawCallFlow() {
 
         <line x1="210" y1="120" x2="360" y2="120"
               stroke="black" marker-end="url(#arrow)"/>
-        <text x="250" y="110">REGISTER</text>
+        <text x="250" y="110">REGISTER        
+        IMPU, auth data(username,realm,algorithm,authURI)
+        sip instance,security algorithm,security-client=ip=sec
+        </text>
 
         <line x1="360" y1="160" x2="660" y2="160"
               stroke="black" marker-end="url(#arrow)"/>
-        <text x="470" y="150">UAR</text>
+        <text x="470" y="150">UAR(User Authorization Request)
+        IMPU, User-Name, Visited-Network-ID</text>
 
         <line x1="660" y1="200" x2="360" y2="200"
               stroke="black" marker-end="url(#arrow)"/>
-        <text x="470" y="190">UAA</text>
+        <text x="470" y="190">UAA(User Authorization Answer)
+        Result= DIAMETER_FIRST_REGISTRAION
+        </text>
+
+        <line x1="360" y1="240" x2="510" y2="240"
+              stroke="black" marker-end="url(#arrow)"/>
+        <text x="250" y="110">REGISTER</text>
       </svg>`;
       break;
 
     /* ================= IMS OG CALL ================= */
-    case 'OG Call':
+    case 'IMS OG Call':
       svg = `
       <svg width="1000" height="500">
         <defs>
