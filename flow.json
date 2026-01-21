@@ -1,0 +1,13 @@
+{
+  "name": "IMS Registration",
+  "nodes": ["UE", "P-CSCF", "I-CSCF", "S-CSCF", "HSS"],
+  "messages": [
+    { "from": "UE", "to": "P-CSCF", "text": ["REGISTER"] },
+    { "from": "P-CSCF", "to": "I-CSCF", "text": ["REGISTER", "IMPU, IMPI"] },
+    { "from": "I-CSCF", "to": "HSS", "text": ["UAR", "Visited-Network-ID"] },
+    { "from": "HSS", "to": "I-CSCF", "text": ["UAA", "FIRST_REGISTRATION"] },
+    { "from": "I-CSCF", "to": "S-CSCF", "text": ["REGISTER"] },
+    { "from": "S-CSCF", "to": "HSS", "text": ["MAR"] },
+    { "from": "HSS", "to": "S-CSCF", "text": ["MAA"] }
+  ]
+}
