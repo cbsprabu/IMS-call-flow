@@ -12,83 +12,72 @@
 <body>
 
 <h2>IMS Call Flow Diagram</h2>
-          <form>
-            <label for="network">Choose a call type:</label>
-            <select id="network" name="network">
-                <option value="Registration">Registration</option>
-                <option value="Third-party Registration">Third-party Registration</option>
-                <option value="VoLTE to VoLTE call">VoLTE to VoLTE call</option>
-                <option value="VoLTE to CS(Pure) call">VoLTE to CS(Pure) call</option>
-                <option value="CS to VoLTE call">CS to VoLTE call</option>
-            </select>
-        </form>
-</div>
-    <!-- Call Status -->
-    <div class="status" id="callStatus">Call Flow not started</div>
-    <!-- Start Call Button -->
-    <button onclick="startCall()">Start Call Flow</button>
-    <!-- Container for MSC Diagram -->
-    <div id="callFlowDiagram">
-        <!-- The diagram will be displayed here -->
-    </div>
+<select id="callType" onchange="drawCallFlow()">
+  <option value="">Select Call Type</option>
+  <option value="Registration">IMS Registration</option>
+  <option value="Call">IMS Call</option>
+</select>
+
+<div id="diagram"></div>
 <script>
-        function startCall() {
-            const callStatus = document.getElementById('callStatus');
-            const callFlowDiagram = document.getElementById('callFlowDiagram');
-            const selectedCallType = document.getElementById('network').value;
+function drawCallFlow() {
+  const selectedCallType = document.getElementById("callType").value;
+  let svg = "";
 
-            // Update call status
-            callStatus.textContent = `Call Flow started: ${selectedCallType}`;
-            switch (selectedCallType) {
-                case 'Registration':
-                <svg width="1000" height="500">
-  <!-- Network Elements -->
-  <text x="50" y="30">UE-A</text>
-  <text x="200" y="30">P-CSCF</text>
-  <text x="350" y="30">I-CSCF</text>
-  <text x="500" y="30">S-CSCF</text>
-  <text x="650" y="30">HSS</text>
-  <text x="800" y="30">UE-B</text>
+  switch (selectedCallType) {
 
-  <marker id="arrow"
-          markerWidth="10"
-          markerHeight="10"
-          refX="10"
-          refY="5"
-          orient="auto"
-          markerUnits="strokeWidth">
-    <path d="M0,0 L10,5 L0,10 Z" fill="black" />
-  </marker>
+    case 'Registration':
+      svg = `
+      <svg width="1000" height="500">
 
-  <!-- Lifelines -->
-  <line x1="60" y1="40" x2="60" y2="450" stroke="gray"/>
-  <line x1="210" y1="40" x2="210" y2="450" stroke="gray"/>
-  <line x1="360" y1="40" x2="360" y2="450" stroke="gray"/>
-  <line x1="510" y1="40" x2="510" y2="450" stroke="gray"/>
-  <line x1="660" y1="40" x2="660" y2="450" stroke="gray"/>
-  <line x1="810" y1="40" x2="810" y2="450" stroke="gray"/>
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10"
+                  refX="10" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="black"/>
+          </marker>
+        </defs>
 
-  <!-- Messages -->
-  <line x1="60" y1="80" x2="210" y2="80" stroke="black" marker-end="url(#arrow)" />
-  <text x="100" y="70">INVITE</text>
+        <!-- Network Elements -->
+        <text x="50" y="30">UE</text>
+        <text x="200" y="30">P-CSCF</text>
+        <text x="350" y="30">I-CSCF</text>
+        <text x="500" y="30">S-CSCF</text>
+        <text x="650" y="30">HSS</text>
 
-  <line x1="210" y1="120" x2="360" y2="120" stroke="black" marker-end="url(#arrow)"/>
-  <text x="240" y="110">INVITE</text>
+        <!-- Lifelines -->
+        <line x1="60" y1="40" x2="60" y2="450" stroke="gray"/>
+        <line x1="210" y1="40" x2="210" y2="450" stroke="gray"/>
+        <line x1="360" y1="40" x2="360" y2="450" stroke="gray"/>
+        <line x1="510" y1="40" x2="510" y2="450" stroke="gray"/>
+        <line x1="660" y1="40" x2="660" y2="450" stroke="gray"/>
 
-  <line x1="360" y1="160" x2="660" y2="160" stroke="black" marker-end="url(#arrow)"/>
-  <text x="420" y="150">UAR</text>
+        <!-- Messages -->
+        <line x1="60" y1="80" x2="210" y2="80"
+              stroke="black" marker-end="url(#arrow)"/>
+        <text x="100" y="70">REGISTER</text>
 
-  <line x1="660" y1="200" x2="360" y2="200" stroke="black" marker-end="url(#arrow)"/>
-  <text x="420" y="190">UAA</text>
+        <line x1="210" y1="120" x2="360" y2="120"
+              stroke="black" marker-end="url(#arrow)"/>
+        <text x="240" y="110">REGISTER</text>
 
-  <line x1="360" y1="240" x2="510" y2="240" stroke="black" marker-end="url(#arrow)"/>
-  <text x="390" y="230">INVITE</text>
+        <line x1="360" y1="160" x2="660" y2="160"
+              stroke="black" marker-end="url(#arrow)"/>
+        <text x="450" y="150">UAR</text>
 
-  <line x1="510" y1="280" x2="810" y2="280" stroke="black"/>
-  <text x="620" y="270">INVITE</text>
+        <line x1="660" y1="200" x2="360" y2="200"
+              stroke="black" marker-start="url(#arrow)"/>
+        <text x="450" y="190">UAA</text>
 
-</svg>
-            </script>
+      </svg>`;
+      break;
+
+    default:
+      svg = "<p>Please select a call type</p>";
+  }
+
+  document.getElementById("diagram").innerHTML = svg;
+}
+</script>
 </body>
 </html>
 
