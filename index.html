@@ -22,8 +22,26 @@
                 <option value="CS to VoLTE call">CS to VoLTE call</option>
             </select>
         </form>
+</div>
+    <!-- Call Status -->
+    <div class="status" id="callStatus">Call Flow not started</div>
+    <!-- Start Call Button -->
+    <button onclick="startCall()">Start Call Flow</button>
+    <!-- Container for MSC Diagram -->
+    <div id="callFlowDiagram">
+        <!-- The diagram will be displayed here -->
+    </div>
+<script>
+        function startCall() {
+            const callStatus = document.getElementById('callStatus');
+            const callFlowDiagram = document.getElementById('callFlowDiagram');
+            const selectedCallType = document.getElementById('network').value;
 
-<svg width="1000" height="500">
+            // Update call status
+            callStatus.textContent = `Call Flow started: ${selectedCallType}`;
+            switch (selectedCallType) {
+                case 'Registration':
+                <svg width="1000" height="500">
   <!-- Network Elements -->
   <text x="50" y="30">UE-A</text>
   <text x="200" y="30">P-CSCF</text>
@@ -70,7 +88,7 @@
   <text x="620" y="270">INVITE</text>
 
 </svg>
-
+            </script>
 </body>
 </html>
 
