@@ -545,6 +545,7 @@ svg.appendChild(defs);
       line.setAttribute('y1', baseY);
       line.setAttribute('x2', toPos.x);
       line.setAttribute('y2', baseY);
+      line.setAttribute('marker-end', 'url(#arrow)');
       line.addEventListener('click', () => showDetail(msg));
       svg.appendChild(line);
 
