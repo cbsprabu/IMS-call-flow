@@ -522,6 +522,26 @@ svg.appendChild(defs);
         group.appendChild(text);
         svg.appendChild(group);
       });
+           // ================================
+      // HORIZONTAL LIFELINES (MSC STYLE)
+      // ================================
+      const lifelineStartY = 180;
+      const lifelineGap = 80;
+
+      for (let i = 0; i < currentFlow.messages.length; i++) {
+        const y = lifelineStartY + i * lifelineGap;
+
+        const lifeline = document.createElementNS(svgNS, 'line');
+        lifeline.setAttribute('x1', 40);
+        lifeline.setAttribute('y1', y);
+        lifeline.setAttribute('x2', 1360);
+        lifeline.setAttribute('y2', y);
+        lifeline.setAttribute('stroke', '#e5e7eb');
+        lifeline.setAttribute('stroke-width', '1');
+        lifeline.setAttribute('stroke-dasharray', '4,4');
+
+        svg.appendChild(lifeline);
+      }
 
       // Draw completed message lines
       for (let i = 0; i < currentStep; i++) {
