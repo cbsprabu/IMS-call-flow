@@ -488,6 +488,26 @@ svg.appendChild(defs);
               animateStep();
             }
           });
+
+          // ================================
+// VERTICAL LIFELINES (MSC STYLE)
+// ================================
+const lifelineTopY = boxY + boxHeight + 10;
+const lifelineBottomY =
+  180 + (currentFlow.messages.length - 1) * 80 + 40;
+
+Object.values(boxPositions).forEach(pos => {
+  const vLine = document.createElementNS(svgNS, 'line');
+  vLine.setAttribute('x1', pos.x);
+  vLine.setAttribute('y1', lifelineTopY);
+  vLine.setAttribute('x2', pos.x);
+  vLine.setAttribute('y2', lifelineBottomY);
+  vLine.setAttribute('stroke', '#cbd5e1');
+  vLine.setAttribute('stroke-width', '1.5');
+  vLine.setAttribute('stroke-dasharray', '6,6');
+
+  svg.appendChild(vLine);
+});
         }
 
         // Front face
