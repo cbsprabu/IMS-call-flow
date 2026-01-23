@@ -539,9 +539,9 @@ Object.values(boxPositions).forEach(pos => {
   vLine.setAttribute('y2', lifelineBottomY);
 
   // 🔥 BOLD MSC STYLE
-  vLine.setAttribute('stroke', '#475569');
+  vLine.setAttribute('stroke', '#334155');
   vLine.setAttribute('stroke-width', '3');
-  vLine.setAttribute('stroke-dasharray', '8,6');
+  vLine.setAttribute('shape-rendering', 'crispEdges');
 
   svg.appendChild(vLine);
 });
