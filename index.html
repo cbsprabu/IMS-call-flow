@@ -360,11 +360,11 @@
       Registration: {
         participants: ["UE", "P-CSCF", "I-CSCF", "S-CSCF", "HSS"],
         messages: [
-          { from: 0, to: 1, label: "REGISTER", details: { Protocol: "SIP", Purpose: "Initial registration", Port: "5060" } },
+          { from: 0, to: 1, label: "REGISTER", details: { Protocol: "SIP", ImportantToSee: "Initial registration", Port: "5060" } },
           { from: 1, to: 2, label: "REGISTER", details: { Protocol: "SIP", Auth: "Yes", Encryption: "TLS" } },
-          { from: 2, to: 4, label: "UAR", details: { Protocol: "DIAMETER", Purpose: "User Auth Request" } },
+          { from: 2, to: 4, label: "UAR", details: { Protocol: "DIAMETER", ImportantToSee: "User Auth Request" } },
           { from: 4, to: 2, label: "UAA", details: { Protocol: "DIAMETER", ImportantToSee: "DIAMETER_FIRST_REGISTRATION in experimental result and SCSCF name or server capability list" } },
-          { from: 2, to: 3, label: "REGISTER", details: { Protocol: "SIP", Purpose: "S-CSCF assignment" } }
+          { from: 2, to: 3, label: "REGISTER", details: { Protocol: "SIP", ImportantToSee: "S-CSCF assignment" } }
         ]
       },
       "IMS OG Call": {
