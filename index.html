@@ -489,25 +489,6 @@ svg.appendChild(defs);
             }
           });
 
-          // ================================
-// VERTICAL LIFELINES (MSC STYLE)
-// ================================
-const lifelineTopY = boxY + boxHeight + 10;
-const lifelineBottomY =
-  180 + (currentFlow.messages.length - 1) * 80 + 40;
-
-Object.values(boxPositions).forEach(pos => {
-  const vLine = document.createElementNS(svgNS, 'line');
-  vLine.setAttribute('x1', pos.x);
-  vLine.setAttribute('y1', lifelineTopY);
-  vLine.setAttribute('x2', pos.x);
-  vLine.setAttribute('y2', lifelineBottomY);
-  vLine.setAttribute('stroke', '#cbd5e1');
-  vLine.setAttribute('stroke-width', '1.5');
-  vLine.setAttribute('stroke-dasharray', '6,6');
-
-  svg.appendChild(vLine);
-});
         }
 
         // Front face
@@ -542,6 +523,29 @@ Object.values(boxPositions).forEach(pos => {
         group.appendChild(text);
         svg.appendChild(group);
       });
+
+      // ================================
+// VERTICAL LIFELINES (MSC STYLE)
+// ================================
+const lifelineTopY = boxY + boxHeight + 12;
+const lifelineBottomY =
+  180 + (currentFlow.messages.length - 1) * 80 + 60;
+
+Object.values(boxPositions).forEach(pos => {
+  const vLine = document.createElementNS(svgNS, 'line');
+  vLine.setAttribute('x1', pos.x);
+  vLine.setAttribute('y1', lifelineTopY);
+  vLine.setAttribute('x2', pos.x);
+  vLine.setAttribute('y2', lifelineBottomY);
+
+  // 🔥 BOLD MSC STYLE
+  vLine.setAttribute('stroke', '#475569');
+  vLine.setAttribute('stroke-width', '3');
+  vLine.setAttribute('stroke-dasharray', '8,6');
+
+  svg.appendChild(vLine);
+});
+
       // Draw completed message lines
       for (let i = 0; i < currentStep; i++) {
         drawMessageLine(svg, currentFlow.messages[i], i, boxPositions);
