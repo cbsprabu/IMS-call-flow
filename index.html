@@ -360,11 +360,25 @@
       Registration: {
         participants: ["UE", "P-CSCF", "I-CSCF", "S-CSCF", "HSS"],
         messages: [
-          { from: 0, to: 1, label: "REGISTER", details: { Protocol: "SIP", ImportantToSee: "Initial registration", Port: "5060" } },
+          { from: 0, to: 1, label: "REGISTER", details: { Protocol: "SIP", ImportantToSee: "IMPU,auth data, SIP instance", Port: "5060" } },
           { from: 1, to: 2, label: "REGISTER", details: { Protocol: "SIP", Auth: "Yes", Encryption: "TLS" } },
-          { from: 2, to: 4, label: "UAR", details: { Protocol: "DIAMETER", ImportantToSee: "User Auth Request" } },
+          { from: 2, to: 4, label: "UAR", details: { Protocol: "DIAMETER", ImportantToSee: "IMPU, User-Name, Visited Network-ID" } },
           { from: 4, to: 2, label: "UAA", details: { Protocol: "DIAMETER", ImportantToSee: "DIAMETER_FIRST_REGISTRATION in experimental result and SCSCF name or server capability list" } },
           { from: 2, to: 3, label: "REGISTER", details: { Protocol: "SIP", ImportantToSee: "S-CSCF assignment" } }
+          { from: 3, to: 4, label: "MAR", details: { Protocol: "DIAMETER", ImportantToSee: "IMPU, Auth-Scheme, Visited Network-ID" } },
+          { from: 4, to: 3, label: "MAA", details: { Protocol: "DIAMETER", ImportantToSee: "IMPU, Auth-Data, IMPI" } },
+          { from: 3, to: 1, label: "401 Unthorized", details: { Protocol: "SIP", ImportantToSee: "Auth-Data,nonce,realm" } },
+          { from: 1, to: 0, label: "401 Unthorized", details: { Protocol: "SIP", ImportantToSee: "Auth-Data,scheme, algorithm" } },
+          { from: 0, to: 1, label: "REGISTER", details: { Protocol: "SIP", ImportantToSee: "Auth data(Auth Scheme,algorithm,intogrity protected,username, SIP instance", Port: "5060" } },
+          { from: 1, to: 2, label: "REGISTER", details: { Protocol: "SIP", Auth: "Yes", Encryption: "TLS" } },
+          { from: 2, to: 4, label: "UAR", details: { Protocol: "DIAMETER", ImportantToSee: "IMPU, User-Name, Visited Network-ID" } },
+          { from: 4, to: 2, label: "UAA", details: { Protocol: "DIAMETER", ImportantToSee: "DIAMETER_SUBSEQUENT_REGISTRATION in experimental result and Server name" } },
+          { from: 2, to: 3, label: "REGISTER", details: { Protocol: "SIP", ImportantToSee: "S-CSCF assignment" } }
+          { from: 3, to: 4, label: "SAR", details: { Protocol: "DIAMETER", ImportantToSee: "IMPU, Auth-Scheme, Servername" } },
+          { from: 4, to: 3, label: "SAA", details: { Protocol: "DIAMETER", ImportantToSee: "IMPU, IFC" } },
+          { from: 3, to: 1, label: "200 OK", details: { Protocol: "SIP", ImportantToSee: "Successful Registration" } },
+          { from: 1, to: 0, label: "200 OK", details: { Protocol: "SIP", ImportantToSee: "Successful Registration" } },
+          
         ]
       },
       "IMS OG Call": {
