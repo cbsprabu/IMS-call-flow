@@ -455,7 +455,10 @@
       }
 
       const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('viewBox', '0 0 1400 900');
+      const svgHeight = 180 + currentFlow.messages.length * 80 + 120;
+     
+svg.setAttribute('viewBox', `0 0 1400 ${svgHeight}`);
+svg.setAttribute('height', svgHeight);
       svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 // ---------- ADD THIS BLOCK (ONCE) ----------
 const defs = document.createElementNS(svgNS, 'defs');
